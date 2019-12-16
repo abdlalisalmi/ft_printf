@@ -10,6 +10,7 @@ SRC=	ft_printf.c\
 		convert_to_hexa.c\
 		is_pointer.c\
 		is_unsigned.c\
+		is_percent.c\
 	ft_atoi.c\
 	ft_itoa.c\
 	ft_putchar.c\

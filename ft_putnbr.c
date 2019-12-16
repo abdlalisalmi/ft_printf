@@ -14,8 +14,8 @@
 
 int		ft_putnbr(int n)
 {
-	unsigned int nb;
-	int nprint;
+	unsigned int	nb;
+	int				nprint;
 
 	nb = n;
 	nprint = 0;

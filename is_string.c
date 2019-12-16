@@ -12,48 +12,48 @@
 
 #include "ft_printf.h"
 
-static void    right_print(char *str, int strlen, t_struct *list)
+static void		right_print(char *str, int strlen, t_struct *list)
 {
-    if (strlen > list->precision && list->precision > 0)
-        strlen = list->precision;
-    if (list->precision == 0)
-        strlen = 0;
-    list->nprint += write(1, str, strlen);
-    while (list->width > strlen)
-    {
-        list->nprint += write(1, " ", 1);
-        list->width--;
-    }
+	if (strlen > list->precision && list->precision > 0)
+		strlen = list->precision;
+	if (list->precision == 0)
+		strlen = 0;
+	list->nprint += write(1, str, strlen);
+	while (list->width > strlen)
+	{
+		list->nprint += write(1, " ", 1);
+		list->width--;
+	}
 }
 
-static void    left_print(char *str, int strlen, t_struct *list)
+static void		left_print(char *str, int strlen, t_struct *list)
 {
-    if (strlen > list->precision && list->precision > 0)
-        strlen = list->precision;
-    if (list->precision == 0)
-        strlen = 0;
-    if (list->width > strlen)
-    {
-        while ((list->width - strlen) > 0)
-        {
-            list->nprint += write(1, " ", 1);
-            list->width--;
-        }
-    }
-    list->nprint += write(1, str, strlen);
+	if (strlen > list->precision && list->precision > 0)
+		strlen = list->precision;
+	if (list->precision == 0)
+		strlen = 0;
+	if (list->width > strlen)
+	{
+		while ((list->width - strlen) > 0)
+		{
+			list->nprint += write(1, " ", 1);
+			list->width--;
+		}
+	}
+	list->nprint += write(1, str, strlen);
 }
 
-void is_string(t_struct *list, va_list ap)
+void			is_string(t_struct *list, va_list ap)
 {
-    char *str;
-    int strlen;
+	char	*str;
+	int		strlen;
 
-    str = (char *)va_arg(ap, char *);
-    if (str == NULL)
-        str = "(null)";
-    strlen = ft_strlen(str);
-    if (list->minus == 0)
-        left_print(str, strlen, list);
-    else
-        right_print(str, strlen, list);
+	str = (char *)va_arg(ap, char *);
+	if (str == NULL)
+		str = "(null)";
+	strlen = ft_strlen(str);
+	if (list->minus == 0)
+		left_print(str, strlen, list);
+	else
+		right_print(str, strlen, list);
 }

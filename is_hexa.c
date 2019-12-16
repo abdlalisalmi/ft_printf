@@ -6,13 +6,13 @@
 /*   By: aes-salm <aes-salm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/09 15:15:49 by aes-salm          #+#    #+#             */
-/*   Updated: 2019/12/10 20:24:54 by aes-salm         ###   ########.fr       */
+/*   Updated: 2019/12/15 21:53:35 by aes-salm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static void right_print(char *hexa_str, int strlen, t_struct *list)
+static void		right_print(char *hexa_str, int strlen, t_struct *list)
 {
 	while (list->precision > 0)
 	{
@@ -27,12 +27,12 @@ static void right_print(char *hexa_str, int strlen, t_struct *list)
 	}
 }
 
-static void left_print(char *hexa_str, int strlen, t_struct *list)
+static void		left_print(char *hexa_str, int strlen, t_struct *list)
 {
 	char c;
 
 	c = ' ';
-	if (list->zero == 1)
+	if (list->zero == 1 && list->precision == -1)
 		c = '0';
 	while (list->width-- > 0)
 		list->nprint += write(1, &c, 1);
@@ -41,20 +41,26 @@ static void left_print(char *hexa_str, int strlen, t_struct *list)
 	list->nprint += write(1, hexa_str, strlen);
 }
 
-static void arg_handle(char *hexa_str, t_struct *list)
+static void		arg_handle(char *hexa_str, t_struct *list)
 {
 	int strlen;
+	int pre;
 
-	if (hexa_str[0] == '0')
+	pre = 0;
+	if (hexa_str[0] == '0' && list->precision == 0)
 		strlen = 0;
 	else
 		strlen = ft_strlen(hexa_str);
+	if (list->precision == -1)
+		pre = 1;
 	if (list->precision > strlen)
 		list->precision -= strlen;
 	else
 		list->precision = 0;
-    if (list->width > 0)
-        list->width -= list->precision + strlen;
+	if (list->width > 0)
+		list->width -= list->precision + strlen;
+	if (pre == 1)
+		list->precision = -1;
 	if (list->minus == 0)
 		left_print(hexa_str, strlen, list);
 	if (list->minus == 1)
@@ -63,16 +69,18 @@ static void arg_handle(char *hexa_str, t_struct *list)
 		free(hexa_str);
 }
 
-void    is_hexa(char c, t_struct *list, va_list ap)
+void			is_hexa(char c, t_struct *list, va_list ap)
 {
-    long decimal;
-    char *hexa_str;
+	long decimal;
+	char *hexa_str;
 
-	hexa_str = NULL;
-    decimal = va_arg(ap, long);
-    if (c == 'x')
-        hexa_str = convert_to_hexa(decimal, c);
-    else if (c == 'X')
-        hexa_str = convert_to_hexa(decimal, c);
-    arg_handle(hexa_str, list);
+	decimal = va_arg(ap, long);
+	if (c == 'x')
+		hexa_str = convert_to_hexa(decimal, c);
+	else if (c == 'X')
+		hexa_str = convert_to_hexa(decimal, c);
+	if (list->width == 0 && list->precision == -1)
+		list->nprint += write(1, hexa_str, ft_strlen(hexa_str));
+	else
+		arg_handle(hexa_str, list);
 }

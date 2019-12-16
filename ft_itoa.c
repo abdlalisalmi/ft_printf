@@ -34,7 +34,7 @@ static int		ft_intlen(long x)
 	return (i + sing);
 }
 
-static char	*string_rev(char *str)
+static char		*string_rev(char *str)
 {
 	int i;
 	int len;
@@ -58,7 +58,7 @@ static char	*string_rev(char *str)
 	return (str);
 }
 
-char	*ft_itoa(long n)
+char			*ft_itoa(long n)
 {
 	char	*str;
 	int		len;
